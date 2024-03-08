@@ -14,13 +14,13 @@ class NeuralNetwork:
             self.count.append('--')
        
 
-    def _sigmoid(self, x):
+    def _sigmoid(self, x) -> float:
         return 1 / (1 + np.exp(-x))
 
-    def _sigmoid_deriv(self, x):
+    def _sigmoid_deriv(self, x) -> float:
         return self._sigmoid(x) * (1 - self._sigmoid(x))
 
-    def predict(self, input_vector):
+    def predict(self, input_vector: list) -> float:
         neuron = np.dot(input_vector, self.weights) + self.bias
         neuron = self._sigmoid(neuron)
         neuron_result = neuron
@@ -141,8 +141,8 @@ class Data:
         self.num_samples = num_samples
         
 
-    def _calculate_bmi(self,altura, peso) -> float:
-        return  peso / (altura ** 2)
+    def _calculate_bmi(self,height, wheight) -> float:
+        return  wheight / (wheight ** 2)
         
 
     def generate_data_training(self) -> np.ndarray: 
@@ -155,8 +155,7 @@ class Data:
         return input_vectors, targets
 
 input_vectors, targets = Data(10000).gerar_dados()
-# Paste the NeuralNetwork class code here
-# (and don't forget to add the train method to the class)
+
 
 import matplotlib.pyplot as plt
 
@@ -166,7 +165,7 @@ learning_rate = 1
 
 
 
-def genetic(n):
+def genetic(n) -> None:
     sequence = []
     best = float('inf')
     for i in range(n):
