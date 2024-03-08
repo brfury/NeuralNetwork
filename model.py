@@ -141,16 +141,17 @@ class Data:
         self.num_samples = num_samples
         
 
-    def _calcular_imc(self,altura, peso) -> float:
+    def _calculate_bmi(self,altura, peso) -> float:
         return  peso / (altura ** 2)
         
 
-    def gerar_dados(self) -> np.ndarray: 
-        alturas = np.random.uniform(1.5, 2, self.num_samples)
-        pesos = np.random.uniform(0.45, 0.90, self.num_samples)
-        imcs = [self._calcular_imc(alturas[i], pesos[i]) for i in range(self.num_samples)]
-        input_vectors = np.column_stack((alturas, pesos))
-        targets = np.array(imcs)
+    def generate_data_training(self) -> np.ndarray: 
+        height = np.random.uniform(1.5, 2, self.num_samples)
+        
+        Weight = np.random.uniform(0.45, 0.90, self.num_samples)
+        bmi = [self._calcular_imc(height[i], Weight[i]) for i in range(self.num_samples)]
+        input_vectors = np.column_stack((height, Weight))
+        targets = np.array(bmi)
         return input_vectors, targets
 
 input_vectors, targets = Data(10000).gerar_dados()
