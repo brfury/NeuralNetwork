@@ -1,20 +1,20 @@
-import numpy as np 
-import os
 import json
+import os
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class NeuralNetwork:
-    
+
     def __init__(self, learning_rate=10e-4):
         self.weights = np.array([np.random.randn(), np.random.randn()])
         self.bias = np.random.randn()
         self.learning_rate = learning_rate
         self.count = []
         self.cumulative_errors = []
-        
-        self.count = [ '_' for i in range(100)]
-       
+
+        self.count = ["_" for i in range(100)]
 
     def _sigmoid(self, x) -> float:
         """
@@ -76,12 +76,8 @@ class NeuralNetwork:
         dlayer1_dbias = 1
         dlayer1_dweights = (0 * self.weights) + (1 * input_vector)
 
-        derror_dbias = (
-            derror_dprediction * dprediction_dlayer1 * dlayer1_dbias
-        )
-        derror_dweights = (
-            derror_dprediction * dprediction_dlayer1 * dlayer1_dweights
-        )
+        derror_dbias = derror_dprediction * dprediction_dlayer1 * dlayer1_dbias
+        derror_dweights = derror_dprediction * dprediction_dlayer1 * dlayer1_dweights
 
         return derror_dbias, derror_dweights
 
@@ -94,10 +90,8 @@ class NeuralNetwork:
             derror_dweights (list): Gradiente do erro em relação aos pesos.
         """
         self.bias = self.bias - (derror_dbias * self.learning_rate)
-        self.weights -= (
-            derror_dweights * self.learning_rate
-        )
-    
+        self.weights -= derror_dweights * self.learning_rate
+
     def cal_percent_train(self, current_iteration: int, iterations: int) -> int:
         """
         Calcula e exibe o percentual de treinamento.
@@ -106,14 +100,12 @@ class NeuralNetwork:
             current_iteration: Número da iteração atual.
             iterations (int): Número total de iterações.
         """
-        
-        
+
         data = round(current_iteration / iterations * 100)
 
         data = round(current_iteration / iterations * 100)
-        progress = '|' * (data // 2) + ' ' * ((100 - data) // 2)
-        print(f'\rProgresso: [{progress}] {data}%', end='', flush=True)
-           
+        progress = "|" * (data // 2) + " " * ((100 - data) // 2)
+        print(f"\rProgresso: [{progress}] {data}%", end="", flush=True)
 
     def train(self, input_vectors: list, targets: list, iterations: int) -> list:
         """
@@ -126,30 +118,25 @@ class NeuralNetwork:
         Returns:
             : Lista com os erros cumulativos ao longo do treinamento.
         """
-        
+
         for current_iteration in range(iterations * 100):
-            
+
             random_data_index = np.random.randint(len(input_vectors))
 
             input_vector = input_vectors[random_data_index]
             target = targets[random_data_index]
 
-           
             derror_dbias, derror_dweights = self._compute_gradients(
                 input_vector, target
             )
 
             self._update_parameters(derror_dbias, derror_dweights)
 
-          
             if current_iteration % 100 == 0:
-                
-                
-                
+
                 cumulative_error = 0
                 self.cal_percent_train(current_iteration, iterations * 100)
-                
-             
+
                 for data_instance_index in range(len(input_vectors)):
                     data_point = input_vectors[data_instance_index]
                     target = targets[data_instance_index]
@@ -159,9 +146,7 @@ class NeuralNetwork:
 
                     cumulative_error += error
                 self.cumulative_errors.append(cumulative_error)
-                
-                
-        
+
         return self.cumulative_errors
 
     def save_model(self, erro: float, history: list) -> None:
@@ -173,13 +158,13 @@ class NeuralNetwork:
             history (list): Lista com o histórico de erros cumulativos.
         """
         model = {
-            'wheights': self.weights.tolist(),
-            'bias': self.bias,
-            'erro': erro,
-            'history': history
+            "wheights": self.weights.tolist(),
+            "bias": self.bias,
+            "erro": erro,
+            "history": history,
         }
 
-        with open('wheights.json', 'w') as wheights:
+        with open("wheights.json", "w") as wheights:
             json.dump(model, wheights)
 
     def load_model(self, filename="wheights.json") -> bool:
@@ -193,12 +178,12 @@ class NeuralNetwork:
         Returns:
             bool: True se o carregamento for bem-sucedido, False caso contrário.
         """
-        
+
         try:
-            with open(filename, 'r') as weights_file:
+            with open(filename, "r") as weights_file:
                 model = json.load(weights_file)
-                self.weights = np.array(model['wheights'])
-                self.bias = model['bias']
+                self.weights = np.array(model["wheights"])
+                self.bias = model["bias"]
                 return True
         except FileNotFoundError:
             print(f"Error: File {filename} not found.")
@@ -211,23 +196,24 @@ class Data:
     """
     Classe para manipulação de dados e geração de conjuntos de treinamento.
     """
-    def __init__(self, num_samples = 1) -> None:
+
+    def __init__(self, num_samples=1) -> None:
         self.num_samples = num_samples
-        
 
-    def _calculate_bmi(self,height: float, wheight: float) -> float:
-        return  wheight / (height ** 2)
-        
+    def _calculate_bmi(self, height: float, wheight: float) -> float:
+        return wheight / (height**2)
 
-    def generate_data_training(self) -> np.ndarray: 
+    def generate_data_training(self) -> np.ndarray:
         height = np.random.uniform(1.5, 2, self.num_samples)
-        
+
         Weight = np.random.uniform(0.45, 0.90, self.num_samples)
-        bmi = [self._calculate_bmi(height[i], Weight[i]) for i in range(self.num_samples)]
+        bmi = [
+            self._calculate_bmi(height[i], Weight[i]) for i in range(self.num_samples)
+        ]
         input_vectors = np.column_stack((height, Weight))
         targets = np.array(bmi)
         return input_vectors, targets
-    
+
     def error_graphic_generate(self, train_error: str) -> None:
         """
         Gera um gráfico dos erros durante o treinamento.
@@ -235,22 +221,23 @@ class Data:
         Args:
             train_error (str): Nome do arquivo JSON contendo os erros de treinamento.
         """
-        with open(train_error, 'r') as error:
+        with open(train_error, "r") as error:
             error = json.load(error)
-            plt.plot(error['history'])
+            plt.plot(error["history"])
             plt.xlabel("Iterations")
             plt.ylabel("Error for all training instances")
-            plt.savefig('graphics/fig')
+            plt.savefig("graphics/fig")
             plt.show()
 
 
-
-def train_with_genetic(individuals: int, epochs: int, learning_rate = 10e-4, num_data = 100000 ) -> None:
+def train_with_genetic(
+    individuals: int, epochs: int, learning_rate=10e-4, num_data=100000
+) -> None:
     """
     Função para treinar uma Rede Neural utilizando um algoritmo genético.
 
     Esta função realiza o treinamento de uma rede neural utilizando um algoritmo genético,
-    onde cada indivíduo representa uma configuração da rede. O treinamento é realizado em 
+    onde cada indivíduo representa uma configuração da rede. O treinamento é realizado em
     múltiplos indivíduos por um número especificado de épocas.
 
     Args:
@@ -263,26 +250,22 @@ def train_with_genetic(individuals: int, epochs: int, learning_rate = 10e-4, num
     Exemplo de uso:
         train_with_genetic(individuals=10, epochs=100)
     """
-    
+
     input_vectors, targets = Data(num_data).generate_data_training()
     sequence = []
-    best = float('inf')
+    best = float("inf")
     for i in range(individuals):
-        print(f'epoch{i}')
-        
+        print(f"epoch{i}")
+
         neural_network = NeuralNetwork(learning_rate=learning_rate)
         training_error = neural_network.train(input_vectors, targets, epochs)
         indice = training_error[-1]
-      
+
         if indice < best:
             best = indice
             sequence.append(best)
             neural_network.save_model(best, training_error)
-        print(f' error {indice}')
- 
-
-
-
+        print(f" error {indice}")
 
 
 def main():
@@ -293,12 +276,11 @@ def main():
     vc pode passar outro learning_rate e outro num_data se desejar
 
     """
-    
+
     train_with_genetic(3, 10)
 
     # vc pode visualizar o gráfico do melhor inviduo chamando a função
-    Data().error_graphic_generate(train_error='wheights.json')
-
-main()
+    Data().error_graphic_generate(train_error="wheights.json")
 
 
+#main()
