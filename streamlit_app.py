@@ -72,22 +72,23 @@ def create_inputs():
         max_value=2.3,
         min_value=1.2,
     )
-    if st.button("Calcule seu IMC"):
-        if weight_input is not None and height_input is not None:
+    with st.container():
+        if st.button("Calcule seu IMC"):
+            if weight_input is not None and height_input is not None:
 
-            bmi = NeuralNetwork()
-            bmi.load_model()
-            print(height_input, weight_input)
-            result = bmi.predict([height_input, weight_input / 100]) * 100
+                bmi = NeuralNetwork()
+                bmi.load_model()
+                print(height_input, weight_input)
+                result = bmi.predict([height_input, weight_input / 100]) * 100
 
-            st.write(f"Seu IMC aproximado pela rede é: {round(result, 2)}")
+                st.write(f"Seu IMC aproximado pela rede é: {round(result, 2)}")
 
-            generate_fig(value=int(round(result)))
-            st.image("grafico.png", use_column_width=True)
+                generate_fig(value=int(round(result)))
+                st.image("grafico.png", use_column_width=True)
 
-            st.markdown(f"**Classificação:** {classify_bmi(result)}")
-        else:
-            st.warning("Por favor, insira seu peso e altura para calcular o IMC.")
+                st.markdown(f"**Classificação:** {classify_bmi(result)}")
+            else:
+                st.warning("Por favor, insira seu peso e altura para calcular o IMC.")
     git_buton, linkedin = st.columns(2)
 
 
