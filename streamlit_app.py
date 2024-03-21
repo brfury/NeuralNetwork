@@ -72,25 +72,25 @@ def create_inputs():
         max_value=2.3,
         min_value=1.2,
     )
-    imc_buton, git_buton, linkedin = st.columns(3)
+    git_buton, linkedin = st.columns(2)
 
-    with imc_buton:
-        if st.button("Calcule seu IMC"):
-            if weight_input is not None and height_input is not None:
 
-                bmi = NeuralNetwork()
-                bmi.load_model()
-                print(height_input, weight_input)
-                result = bmi.predict([height_input, weight_input / 100]) * 100
+    if st.button("Calcule seu IMC"):
+        if weight_input is not None and height_input is not None:
 
-                st.write(f"Seu IMC aproximado pela rede é: {round(result, 2)}")
+            bmi = NeuralNetwork()
+            bmi.load_model()
+            print(height_input, weight_input)
+            result = bmi.predict([height_input, weight_input / 100]) * 100
 
-                generate_fig(value=int(round(result)))
-                st.image("grafico.png", use_column_width=True)
+            st.write(f"Seu IMC aproximado pela rede é: {round(result, 2)}")
 
-                st.markdown(f"**Classificação:** {classify_bmi(result)}")
-            else:
-                st.warning("Por favor, insira seu peso e altura para calcular o IMC.")
+            generate_fig(value=int(round(result)))
+            st.image("grafico.png", use_column_width=True)
+
+            st.markdown(f"**Classificação:** {classify_bmi(result)}")
+        else:
+            st.warning("Por favor, insira seu peso e altura para calcular o IMC.")
     with git_buton:
         st.link_button("Acesse o repositório da rede", url='https://github.com/brfury/NeuralNetwork')
             
