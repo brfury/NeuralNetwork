@@ -4,7 +4,7 @@ import json
 
 class NeuralNetwork:
     
-    def __init__(self, learning_rate = 10e-2):
+    def __init__(self, learning_rate=10e-4):
         self.weights = np.array([np.random.randn(), np.random.randn()])
         self.bias = np.random.randn()
         self.learning_rate = learning_rate
@@ -53,8 +53,9 @@ class NeuralNetwork:
     
     def cal_percent_train(self, current_iteration, iterations):
         data = round(current_iteration / iterations * 100)
-        if data > 80:
-            self.learning_rate *= 0.99
+       
+        
+        
 
         self.count[int(data) - 1] = '*'
         count = ''.join(self.count)
@@ -67,7 +68,7 @@ class NeuralNetwork:
 
     def train(self, input_vectors, targets, iterations):
         
-        for current_iteration in range(iterations):
+        for current_iteration in range(iterations * 100):
             # Pick a data instance at random
             random_data_index = np.random.randint(len(input_vectors))
 
@@ -85,8 +86,9 @@ class NeuralNetwork:
             if current_iteration % 100 == 0:
                 
                 
+                
                 cumulative_error = 0
-                self.cal_percent_train(current_iteration, iterations)
+                self.cal_percent_train(current_iteration, iterations * 100)
                 
                 # Loop through all the instances to measure the error
                 for data_instance_index in range(len(input_vectors)):
@@ -96,7 +98,7 @@ class NeuralNetwork:
                     prediction = self.predict(data_point)
                     error = np.square(prediction - target)
 
-                    cumulative_error = cumulative_error + error
+                    cumulative_error += error
                 self.cumulative_errors.append(cumulative_error)
                 
                 
@@ -135,32 +137,32 @@ class NeuralNetwork:
             print(f"Error: Invalid JSON format in file {filename}.")
         return False
 
-
+'''
 class Data:
     def __init__(self, num_samples) -> None:
         self.num_samples = num_samples
         
 
     def _calculate_bmi(self,height, wheight) -> float:
-        return  wheight / (wheight ** 2)
+        return   wheight / (height ** 2)
         
 
     def generate_data_training(self) -> np.ndarray: 
         height = np.random.uniform(1.5, 2, self.num_samples)
         
         Weight = np.random.uniform(0.45, 0.90, self.num_samples)
-        bmi = [self._calcular_imc(height[i], Weight[i]) for i in range(self.num_samples)]
+        bmi = [self._calculate_bmi(height[i], Weight[i]) for i in range(self.num_samples)]
         input_vectors = np.column_stack((height, Weight))
         targets = np.array(bmi)
         return input_vectors, targets
 
-input_vectors, targets = Data(10000).gerar_dados()
+input_vectors, targets = Data(50000).generate_data_training()
 
 
 import matplotlib.pyplot as plt
 
 
-learning_rate = 1
+learning_rate = 10e-14
 
 
 
@@ -173,8 +175,9 @@ def genetic(n) -> None:
         
         neural_network = NeuralNetwork(learning_rate=learning_rate)
 
-        training_error = neural_network.train(input_vectors, targets, 10000)
+        training_error = neural_network.train(input_vectors, targets, 100000)
         indice = training_error[-1]
+        return training_error
         
         if indice < best:
             best = indice
@@ -182,26 +185,21 @@ def genetic(n) -> None:
             neural_network.save_model(best)
         print(indice)
 
-    print(sequence)
 
+neural_network = NeuralNetwork(learning_rate=learning_rate)
 
+training_error = neural_network.train(input_vectors, targets, 100)
 
+plt.plot(training_error)
+plt.xlabel("Iterations")
+plt.ylabel("Error for all training instances")
+plt.show()
 
-
-#plt.plot(training_error)
-#plt.xlabel("Iterations")
-#plt.ylabel("Error for all training instances")
-#plt.show()
-#plt.savefig("cumulative_error.png")
-
-
-
-
-
-neural_network = NeuralNetwork()
-neural_network.load_model()
+#neural_network = NeuralNetwork(learning_rate=learning_rate)
+#neural_network.load_model()
 print(round(neural_network.predict([1.89, 0.67]) *100,2))
+print(training_error[-1:-5:-1])
 
 
 
-
+'''
