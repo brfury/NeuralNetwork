@@ -72,9 +72,6 @@ def create_inputs():
         max_value=2.3,
         min_value=1.2,
     )
-    git_buton, linkedin = st.columns(2)
-
-
     if st.button("Calcule seu IMC"):
         if weight_input is not None and height_input is not None:
 
@@ -91,6 +88,10 @@ def create_inputs():
             st.markdown(f"**Classificação:** {classify_bmi(result)}")
         else:
             st.warning("Por favor, insira seu peso e altura para calcular o IMC.")
+    git_buton, linkedin = st.columns(2)
+
+
+    
     with git_buton:
         st.link_button("Acesse o repositório da rede", url='https://github.com/brfury/NeuralNetwork')
             
