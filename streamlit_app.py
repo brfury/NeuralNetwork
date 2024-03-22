@@ -100,7 +100,7 @@ def create_inputs():
         st.link_button("Linkendin",url='https://www.linkedin.com/in/datascientistbruno/',)
 
     st.header('links dos artigos')
-    st.markdown('''A qui vc pode ler e entender desde o básico de uma rede neural, a construir uma do 
+    st.markdown('''A qui você pode ler e entender desde o básico de uma rede neural, a construir uma do 
                 zero, sem auxílio de libs externas como Pytorch ou TensorFlow 
                 [link](https://medium.com/@bruno1912200/entenda-como-uma-rede-neural-funciona-e-construa-sua-rede-neural-do-zero-sem-pytorch-ou-tensorflow-1b0e24e28469) ''' )
     
