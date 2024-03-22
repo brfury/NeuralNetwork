@@ -97,7 +97,7 @@ def create_inputs():
         st.link_button("Acesse o repositório da rede", url='https://github.com/brfury/NeuralNetwork')
             
     with linkedin:
-        st.link_button("Linkendin",url='www.linkedin.com/in/datascientistbruno',)
+        st.link_button("Linkendin",url='https://www.linkedin.com/in/datascientistbruno/',)
 
     st.header('links dos artigos')
     st.markdown('''A qui vc pode ler e entender desde o básico de uma rede neural, a construir uma do 
